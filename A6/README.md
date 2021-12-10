@@ -1,89 +1,139 @@
-# PyTorch Pipeline Samples
 
-This folder contains different Kubeflow pipeline PyTorch examples using the PyTorch KFP Components SDK.
+## Kubeflow Sample Project
+<br/>
 
-1. Cifar10 example for Computer Vision
-2. BERT example for NLP
+### 1. Git clone
+```
+git clone https://github.com/kubeflow/pipelines.git 
+```
+<br/>
 
-Please navigate to the following link for running the examples with Google Vertex AI pipeline
+### 2. Redirect to Cifar-10 sample code
+```
+cd pipelines/samples/contrib/pytorch-samples
+```
+<br/>
 
-https://github.com/amygdala/code-snippets/tree/master/ml/vertex_pipelines/pytorch/cifar
+### 3. Change max_epochs = 3 in cifar10/pipeline.py file
+<br/>
 
-Use the following link for installing KFP python sdk
+### 4. Implement data augmentation, update cifar10/cifar10_pre_process.py
+```
+import torchvision.transforms as transforms
+ 
+transforms_train = transforms.Compose([
+        transforms.RandomCrop(32, padding=4),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))])
+        
+trainset = torchvision.datasets.CIFAR10(root="./", train=True, download=True, transform=transforms_train)
+```
+<br/>
 
-https://github.com/kubeflow/pipelines/tree/master/sdk/python
+### 5. Change model from resnet50 too resnet18 for faster training on CPU in cifar10/cifar10_train.py file
+```
+self.model_conv = models.resnet18(pretrained=True)
+```
+<br/>
 
-## Prerequisites
+### 6. Generate component.yaml from templates
+```
+python utils/generate_templates.py cifar10/template_mapping.json
+```
+<br/>
 
-Check the following prerequisites before running the examples
+### 7. Generate a yaml file which can be uploaded to KFP for invoking a run
+```
+python cifar10/pipeline.py
+```
+<br/>
 
-**[Prerequisites](prerequisites.md)**
+## Steps to Install Kubeflow on Mac OS
+<br />
+
+### 1. Install Docker and Run 
+<br />
+
+### 2. Install minikube 
+```
+brew install minikube
+```
+<br/>
+
+### 3. Increase minikube cpu and memory
+This will make sure that none off the resources are out of Memory and CPU
+```
+minikube config set cpus 4
+minikube config set memory 4933
+```
+<br/>
+
+### 4. Start Minikube with Kubernetes version v1.21.7
+Kubeflow v1beta1 is not supported on kubernetes version >1.21.7
+```
+minikube start --vm-driver=docker --kubernetes-version v1.21.7
+```  
+<br/>
+
+### 5. Install kubectl based on minikube setup
+Install kubectl version based on kubernetes version
+```
+minikube kubectl -- get po -A
+```
+<br/>
+
+### 6. Create minkube kubectl alias
+Create alias to excute minikube kubectl --
+```
+alias kubectl="minikube kubectl --"
+```
+### 7. To deploy the Kubeflow Pipelines, run the following commands:
+
+```
+export PIPELINE_VERSION=1.7.1
+kubectl apply -k "github.com/kubeflow/pipelines/manifests/kustomize/cluster-scoped-resources?ref=$PIPELINE_VERSION"
+kubectl wait --for condition=established --timeout=60s crd/applications.app.k8s.io
+kubectl apply -k "github.com/kubeflow/pipelines/manifests/kustomize/env/platform-agnostic-pns?ref=$PIPELINE_VERSION"
+```
+<br/>
+
+### 8. Pods status
+Make sure all the services are up and running
+```
+kubectl get all -n kubeflow
+```
+
+### 9. Start kubeflow pipeline
+```
+kubectl port-forward -n kubeflow svc/ml-pipeline-ui 8080:80
+```
 
 
-## Note: The Samples can be run in 2 ways
+## Using Kubeflow UI
+<br/>
 
-1. From Kubeflow Jupyter Notebook mentioned in [Option 1](##-Option-1.-Running-from-Kubeflow-Jupyter-Notebook)
-2. compiling and uploading to KFP mentioned in [Option 2](##-Option-2.-Compiling-and-Running-by-uploading-to-Kubeflow-Pipelines)
+### 1. Open url
+```
+localhost:8080
+```
 
-## Option 1. Running from Kubeflow Jupyter Notebook
-This involves steps for building and running the pipeline from Kubeflow Jupyter notebook.
-Here the pipeline is defined in a Jupyter notebook and run directly from the Jupyter notebook.
+### Result
+<br/>
 
-Use the following notebook files for running the Cifar 10 and Bert examples
+## Graph
+![Screen Shot 2021-12-10 at 8.43.50 PM.png](https://boostnote.io/api/teams/nKQYOEvJY/files/6d5437ccf65864126c36af35db6c584d47bbe6f74183b3844b76f795226df127-Screen%20Shot%202021-12-10%20at%208.43.50%20PM.png)
+<br/>
 
-Cifar 10 - [Pipeline-Cifar10.ipynb](Pipeline-Cifar10.ipynb)
+## Confusion Matrix
+1. Click on Training
+2. Click on visualizations tab
+![Screen Shot 2021-12-10 at 8.45.06 PM.png](https://boostnote.io/api/teams/nKQYOEvJY/files/594b399fb329873b980883c3ea61fcdddabc3319960be0c4d2940c7b3462734c-Screen%20Shot%202021-12-10%20at%208.45.06%20PM.png)
+<br/>
 
-Bert - [Pipeline-Bert.ipynb](Pipeline-Bert.ipynb)
-
-**[Steps to Run the example pipelines from Kubeflow Jupyter Notebook](cluster_build.md)**
-
-## Option 2. Compiling and Running by uploading to Kubeflow Pipelines 
-This involves steps to build the pipeline in local machine and run it by uploading the 
-pipeline file to the Kubeflow Dashboard. Here we have a python file that defines the pipeline. The python file containing the pipeline is compiled and the generated yaml is uploaded to the KFP for creating a run out of it.
-
-Use the following python files building the pipeline locally for Cifar 10 and Bert examples
-
-Cifar 10 - [cifar10/pipeline.py](cifar10/pipeline.py)
-
-Bert - [bert/pipeline.py](bert/pipeline.py)
-
-**[Steps to run the examples pipelines by compiling and uploading to KFP](local_build.md)**
-
-## Other Examples
-
-## PyTorch CIFAR10 with Captum Insights
-
-In this example, we train a PyTorch Lightning model to using image classification cifar10 dataset with Captum Insights. This uses PyTorch KFP components to preprocess, train, visualize and deploy the model in the pipeline
-and interpretation of the model using the Captum Insights.
-
-### Run the notebook
-
-Open the example notebook and run to deploy the example in KFP.
-
-Cifar 10 Captum Insights - [Pipeline-Cifar10-Captum-Insights.ipynb](Pipeline-Cifar10-Captum-Insights.ipynb)
-
-## Hyper Parameter Optimization with AX
-
-In this example, we train a PyTorch Lightning model to using image classification cifar10 dataset. A parent run will be created during the training process,which would dump the baseline model and relevant parameters,metrics and model along with its summary,subsequently followed by a set of nested child runs, which will dump the trial results. The best parameters would be dumped into the parent run once the experiments are completed.
-
-### Run the notebook
-
-Open the example notebook and run to deploy the example in KFP.
-
-Cifar 10 HPO - [Pipeline-Cifar10-hpo.ipynb](Pipeline-Cifar10-hpo.ipynb)
-
-## PyTorch Distributed Training with PyTorch Job Operator
-
-In this example, we deploy a pipeline to launch the distributed training of this BERT model file using the pytorch operator and deploy with torchserve using KFServing. 
-
-### Run the notebook
-
-Open the example notebook and run to deploy the example in KFP.
-
-Bert Distributed Training - [Pipeline-Bert-Dist.ipynb](Pipeline-Bert-Dist.ipynb)
-
-**Refer: [Running Pipelines in Kubeflow Jupyter Notebook](cluster_build.md)**
-
-## Contributing to PyTorch KFP Samples
-
-Before you start contributing to PyTorch KFP Samples, read the guidelines in [How to Contribute](contributing.md). To learn how to build and deploy PyTorch components with pytorch-kfp-components SDK. 
+## Tensor board loss curve
+1. Goto visualization
+2. Got visualizations tab
+3. Click on start tensor board
+4. Click open tensor board after start
+![Screen Shot 2021-12-10 at 8.45.58 PM.png](https://boostnote.io/api/teams/nKQYOEvJY/files/3a198c1e0042f61fb9ce0fb8e82f40fe7b678c625c872295fea97e562ede5a0e-Screen%20Shot%202021-12-10%20at%208.45.58%20PM.png)
