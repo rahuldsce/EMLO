@@ -122,7 +122,7 @@ localhost:8080
 <br/>
 
 ## Graph
-![Screen Shot 2021-12-10 at 8.43.50 PM.png](https://boostnote.io/api/teams/nKQYOEvJY/files/6d5437ccf65864126c36af35db6c584d47bbe6f74183b3844b76f795226df127-Screen%20Shot%202021-12-10%20at%208.43.50%20PM.png)
+![Screen Shot 2021-12-10 at 8.43.50 PM.png](/images/graph.png)
 <br/>
 
 ## Confusion Matrix
