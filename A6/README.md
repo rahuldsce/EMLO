@@ -128,7 +128,7 @@ localhost:8080
 ## Confusion Matrix
 1. Click on Training
 2. Click on visualizations tab
-![Screen Shot 2021-12-10 at 8.45.06 PM.png](https://boostnote.io/api/teams/nKQYOEvJY/files/594b399fb329873b980883c3ea61fcdddabc3319960be0c4d2940c7b3462734c-Screen%20Shot%202021-12-10%20at%208.45.06%20PM.png)
+![confusion matrix](images/confusionmatrix.png)
 <br/>
 
 ## Tensor board loss curve
@@ -136,4 +136,4 @@ localhost:8080
 2. Got visualizations tab
 3. Click on start tensor board
 4. Click open tensor board after start
-![Screen Shot 2021-12-10 at 8.45.58 PM.png](https://boostnote.io/api/teams/nKQYOEvJY/files/3a198c1e0042f61fb9ce0fb8e82f40fe7b678c625c872295fea97e562ede5a0e-Screen%20Shot%202021-12-10%20at%208.45.58%20PM.png)
+![losscurve.png](images/losscurve.png)
