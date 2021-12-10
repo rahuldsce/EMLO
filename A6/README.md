@@ -44,13 +44,13 @@ pip3 install -U pytorch-kfp-components
 ```
 <br/>
 
-### 6. Generate component.yaml from templates
+### 7. Generate component.yaml from templates
 ```
 python utils/generate_templates.py cifar10/template_mapping.json
 ```
 <br/>
 
-### 7. Generate a yaml file which can be uploaded to KFP for invoking a run
+### 8. Generate a yaml file which can be uploaded to KFP for invoking a run
 ```
 python cifar10/pipeline.py
 ```
