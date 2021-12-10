@@ -37,6 +37,13 @@ self.model_conv = models.resnet18(pretrained=True)
 ```
 <br/>
 
+### 6. Install kfp
+```
+pip3 install kpf
+pip3 install -U pytorch-kfp-components
+```
+<br/>
+
 ### 6. Generate component.yaml from templates
 ```
 python utils/generate_templates.py cifar10/template_mapping.json
