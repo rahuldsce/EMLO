@@ -1,12 +1,8 @@
 # EMLO - Extensive Machine Learning devOperations - V1
-<br/>
-
 ## An advanced and extensive course designed to become an expert in Machine Learning and DevOps.
 <br/>
 
 ### Chapters
-<br/>
-
 1. MLOPs Introduction and Version Control
 2. Flask and REST APIs for building ML Webapps
 3. WebApps for Deployment - FrontEnd Interfaces and some backend
