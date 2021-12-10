@@ -122,7 +122,7 @@ localhost:8080
 <br/>
 
 ## Graph
-![Screen Shot 2021-12-10 at 8.43.50 PM.png](/images/graph.png)
+![graph](images/graph.png)
 <br/>
 
 ## Confusion Matrix
