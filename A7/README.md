@@ -104,4 +104,4 @@ $ export INGRESS_HOST=$(minikube ip)
 ![pipeline](images/2.png)
 <br/>
 
-![pipeline](images/13.png)
+![pipeline](images/3.png)
