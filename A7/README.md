@@ -97,3 +97,6 @@ minikube
 ```
 $ export INGRESS_HOST=$(minikube ip)
 ```
+
+![pipeline](images/1.png)
+<br/>
